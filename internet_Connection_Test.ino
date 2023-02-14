@@ -9,13 +9,20 @@ EthernetClient client;
 
 unsigned long time_passed;
 unsigned long prev_time = 0;
+unsigned long reset_time = 0;
 unsigned long time_interval = 1800000; // 30 mins
+unsigned long wait_time = 30000;
 
 bool connection_status = true;
 
+int relay_pin = 3;
+int count = 0;
+
 void setup() 
 {
-  
+  pinMode(relay_pin, OUTPUT);
+  digitalWrite(relay_pin, LOW);
+
   Ethernet.init(10);
 
   Serial.begin(9600);
@@ -40,9 +47,20 @@ void loop()
  if(!connection_status)
  {
    Serial.println("Connection lost");
-   // Put reset code for the router here
-
    connection_status = true;
+   digitalWrite(relay_pin, HIGH);
+
+   while(count <= 1)
+   {
+     if(time_passed - reset_time >= wait_time)
+     {
+       reset_time = time_passed;
+       count += 1;
+     }
+     
+   }
+
+   digitalWrite(relay_pin, LOW);
  }
 
 
