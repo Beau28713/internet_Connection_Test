@@ -8,10 +8,10 @@ char server_0[] = "www.google.com";
 EthernetClient client;
 
 unsigned long time_passed;
-unsigned long prev_time = 0;
-unsigned long reset_time = 0;
+unsigned long prev_time_0 = 0;
+unsigned long prev_time_1 = 0;
 unsigned long time_interval = 1800000; // 30 mins
-unsigned long wait_time = 30000;
+unsigned long power_off = 60000; // 1 min
 
 bool connection_status = true;
 
@@ -38,9 +38,9 @@ void loop()
  Ethernet.maintain();
  time_passed = millis();
 
- if(time_passed - prev_time >= time_interval)
+ if(time_passed - prev_time_0 >= time_interval)
  {
-   prev_time = time_passed;
+   prev_time_0 = time_passed;
    connection_status = connection_test();
  }
 
@@ -52,16 +52,20 @@ void loop()
 
    while(count <= 1)
    {
-     if(time_passed - reset_time >= wait_time)
+     if(time_passed - prev_time_1 >= power_off)
      {
-       reset_time = time_passed;
+       prev_time_1 = time_passed;
        count += 1;
      }
      
    }
 
    digitalWrite(relay_pin, LOW);
+   count = 0;
  }
+
+ // Logic that will wait for 10 mins to allow router to boot back up. before
+ // Checking to see ig there is an internet connection
 
 
 }
