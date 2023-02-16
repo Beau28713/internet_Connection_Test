@@ -33,6 +33,43 @@ void setup()
   Serial.println("Serial Connected");
 }
 
+ /*
+ Must sett up the main loop like this in order for the millisto count correctly. 
+unsigned long time_0;
+unsigned long time_1;
+unsigned long prev_time = 0;
+int count = 0;
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Test script");
+}
+
+void loop() {
+  time_0 = millis();
+  Serial.print("Inside the Main loop ");
+  Serial.println(time_0);
+  delay(1000);
+
+  while(count <= 1)
+   {
+     time_1 = millis();
+     Serial.print("Inside the while loop ");
+     Serial.println(time_1);
+     delay(1000);
+     if(time_1 - prev_time >= 10000)
+     {
+       prev_time = time_1;
+       count += 1;
+       Serial.print("Inside the if ststememt ");
+       Serial.println(time_1);
+     }
+     
+   }
+
+}
+;*/
+
 void loop() 
 {
  Ethernet.maintain();
