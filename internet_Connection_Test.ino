@@ -1,3 +1,10 @@
+ /*
+  Things to do 
+  1. Create 10 min timer to allow the router time to reboot and come back online before checking again.
+  2. put all the timers into there own dedicated functions for reuse if needed
+  3. Replace Serial out puts with LCD screen outputs after LCD is added. 
+*/
+
 #include <SPI.h>
 #include <Ethernet.h>
 
@@ -7,11 +14,12 @@ char server_0[] = "www.google.com";
 
 EthernetClient client;
 
-unsigned long time_passed;
+unsigned long time_passed_0;
+unsigned long time_passed_1;
 unsigned long prev_time_0 = 0;
 unsigned long prev_time_1 = 0;
-unsigned long time_interval = 1800000; // 30 mins
-unsigned long power_off = 60000; // 1 min
+unsigned long time_interval = 10000; //1800000; // 30 mins
+unsigned long power_off_time = 60000; // 1 min
 
 bool connection_status = true;
 
@@ -33,51 +41,14 @@ void setup()
   Serial.println("Serial Connected");
 }
 
- /*
- Must sett up the main loop like this in order for the millisto count correctly. 
-unsigned long time_0;
-unsigned long time_1;
-unsigned long prev_time = 0;
-int count = 0;
-
-void setup() {
-  Serial.begin(9600);
-  Serial.println("Test script");
-}
-
-void loop() {
-  time_0 = millis();
-  Serial.print("Inside the Main loop ");
-  Serial.println(time_0);
-  delay(1000);
-
-  while(count <= 1)
-   {
-     time_1 = millis();
-     Serial.print("Inside the while loop ");
-     Serial.println(time_1);
-     delay(1000);
-     if(time_1 - prev_time >= 10000)
-     {
-       prev_time = time_1;
-       count += 1;
-       Serial.print("Inside the if ststememt ");
-       Serial.println(time_1);
-     }
-     
-   }
-
-}
-;*/
-
 void loop() 
 {
  Ethernet.maintain();
- time_passed = millis();
+ time_passed_0 = millis();
 
- if(time_passed - prev_time_0 >= time_interval)
+ if(time_passed_0 - prev_time_0 >= time_interval)
  {
-   prev_time_0 = time_passed;
+   prev_time_0 = time_passed_0;
    connection_status = connection_test();
  }
 
@@ -89,10 +60,13 @@ void loop()
 
    while(count <= 1)
    {
-     if(time_passed - prev_time_1 >= power_off)
+     time_passed_1 = millis();
+
+     if(time_passed_1 - prev_time_1 >= power_off_time)
      {
-       prev_time_1 = time_passed;
+       prev_time_1 = time_passed_1;
        count += 1;
+       Serial.println("Inside the IF statment: "); // For debuging
      }
      
    }
@@ -100,11 +74,7 @@ void loop()
    digitalWrite(relay_pin, LOW);
    count = 0;
  }
-
- // Logic that will wait for 10 mins to allow router to boot back up. before
- // Checking to see ig there is an internet connection
-
-
+ 
 }
 
 bool connection_test()
