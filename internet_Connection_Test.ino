@@ -61,9 +61,9 @@ void loop()
  {
    Serial.println("Connection lost");
    connection_status = true;
-   digitalWrite(relay_pin, HIGH);
-
-  //Power down and reset the router
+   
+   //Power down and reset the router
+   digitalWrite(relay_pin, HIGH);   
    while(count_1 <= 1)
    {
      time_passed_1 = millis();
