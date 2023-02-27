@@ -53,8 +53,19 @@ void loop()
  if(time_passed_0 - prev_time_0 >= time_interval)
  {
    prev_time_0 = time_passed_0;
+<<<<<<< Updated upstream
    connection_status = connection_test();
   }
+=======
+   connection_status = true; //connection_test();
+   
+  // use ths when i have no internet to test with
+   if(connection_status)
+   {
+     Serial.println("Connected");
+   }   
+ }
+>>>>>>> Stashed changes
 
 //If connectio lost, start router reset procedure
  if(!connection_status)
